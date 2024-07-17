@@ -21,7 +21,7 @@ services:
           cpus: '2'
           memory: 4G
     ports:
-      - 0.0.0.0:3306:3306 
+      - 3306:3306 
     volumes:
       - ./startup_scripts:/docker-entrypoint-initdb.d    # will spin up start up scripts; this only spins up if there is NOTHING inside the persistent data storage folder
       - ./cnf:/etc/mysql/conf.d                          # mysql config file https://dev.mysql.com/doc/refman/8.0/en/option-files.html
@@ -36,7 +36,7 @@ services:
       PMA_PORT: "3306"
       UPLOAD_LIMIT: 5000
     ports:
-      - 0.0.0.0:8080:80 
+      - 8080:80 
     depends_on:
       - mysqldb
     networks:
