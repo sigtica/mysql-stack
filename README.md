@@ -1,4 +1,4 @@
-# MYSQL Stack
+# MySQL Stack
 
 This is a containerized MySQL instance with phpMyAdmin for easy development. The idea behind this repo is to make it really easy for quick deployment of a MySQL instance for data engineering and testing purposes. 
 
