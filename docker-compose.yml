@@ -1,0 +1,47 @@
+version: "3.8"
+services:
+
+  mysqldb:
+    image: mysql:8.0.13
+    entrypoint:
+      [
+        "/entrypoint.sh",
+        "--default-authentication-plugin=mysql_native_password",
+        "--character-set-server=utf8mb4",
+        "--collation-server=utf8mb4_unicode_ci",
+      ]
+    environment:
+      MYSQL_ROOT_PASSWORD: sigtica_root
+      MYSQL_USER: sigtica
+      MYSQL_PASSWORD: sigtica
+      MYSQL_DATABASE: sigtica_db_1
+    deploy:
+      resources:
+        limits:
+          cpus: '2'
+          memory: 4G
+    ports:
+      - 0.0.0.0:3306:3306 
+    volumes:
+      - ./startup_scripts:/docker-entrypoint-initdb.d    # will spin up start up scripts; this only spins up if there is NOTHING inside the persistent data storage folder
+      - ./cnf:/etc/mysql/conf.d                          # mysql config file https://dev.mysql.com/doc/refman/8.0/en/option-files.html
+      - ./mysqldb:/var/lib/mysql                         # persistent data storage: this is where the entire db is
+    networks:
+      - mysql_stack
+
+  phpmyadmin:
+    image: phpmyadmin/phpmyadmin:5.0.2
+    environment:
+      PMA_HOST: mysqldb
+      PMA_PORT: "3306"
+      UPLOAD_LIMIT: 5000
+    ports:
+      - 0.0.0.0:8080:80 
+    depends_on:
+      - mysqldb
+    networks:
+      - mysql_stack
+
+networks:
+  mysql_stack:
+
